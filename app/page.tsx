@@ -1,4 +1,17 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function Home() {
   return (
@@ -16,6 +29,49 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.
           </h1>
+          <Button>Button</Button>
+
+          <Dialog>
+            <form>
+              <DialogTrigger asChild>
+                <Button variant="outline">Create Event</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Event Details</DialogTitle>
+                  <DialogDescription>
+                    Create a new Event using this form below. You can always update the event info later.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4">
+                  <div className="grid gap-3">
+                    <Label htmlFor="eventName">Event Name</Label>
+                    <Input
+                      id="eventName"
+                      name="eventName"
+                      defaultValue="Pedro Duarte"
+                      placeholder="Enter the event name here"
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="eventDescription">Event Description</Label>
+                    <Input
+                      id="eventDescription"
+                      name="eventDescription"
+                      defaultValue="@peduarte"
+                      placeholder="Brief info about the event"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button type="submit">Save changes</Button>
+                </DialogFooter>
+              </DialogContent>
+            </form>
+          </Dialog>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Looking for a starting point or more instructions? Head over to{" "}
             <a
