@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Calendar26 from "@/components/calendar-26"
+
 
 export default function Home() {
   return (
@@ -29,6 +31,7 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.
           </h1>
+          
           <Button>Button</Button>
 
           <Dialog>
@@ -60,6 +63,18 @@ export default function Home() {
                       name="eventDescription"
                       defaultValue="@peduarte"
                       placeholder="Brief info about the event"
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Calendar26></Calendar26>
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="eventLocation">Event Location</Label>
+                    <Input
+                      id="eventLocation"
+                      name="eventLocation"
+                      defaultValue="@peduarte"
+                      placeholder="Location of the event"
                     />
                   </div>
                 </div>
