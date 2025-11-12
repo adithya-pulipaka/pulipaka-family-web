@@ -1,27 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronDownIcon } from "lucide-react"
+import { useState, useEffect } from "react";
+import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+import { addYears, format } from "date-fns";
 
-export default function Calendar26() {
-  const [openFrom, setOpenFrom] = React.useState(false)
-  const [openTo, setOpenTo] = React.useState(false)
-  const [dateFrom, setDateFrom] = React.useState<Date | undefined>(
-    new Date("2025-06-01")
-  )
-  const [dateTo, setDateTo] = React.useState<Date | undefined>(
-    new Date("2025-06-03")
-  )
+interface FunctionProps {
+  onEventDurationChange: (startDateTime: string, endDateTime: string) => void;
+}
+
+export default function Calendar26({ onEventDurationChange }: FunctionProps) {
+  const [openFrom, setOpenFrom] = useState(false);
+  const [openTo, setOpenTo] = useState(false);
+  const [dateFrom, setDateFrom] = useState<Date>(new Date());
+  const [dateTo, setDateTo] = useState<Date>(addYears(new Date(), 1));
+  const [timeFrom, setTimeFrom] = useState("00:00:00");
+  const [timeTo, setTimeTo] = useState("23:59:59");
+
+  useEffect(() => {
+    let fromDateTime = `${format(dateFrom, "yyyy-MM-dd")} ${timeFrom}`;
+    let toDateTime = `${format(dateTo, "yyyy-MM-dd")} ${timeTo}`;
+    onEventDurationChange(fromDateTime, toDateTime);
+  }, [dateFrom, dateTo, timeFrom, timeTo]);
 
   return (
     <div className="flex w-full max-w-80 min-w-0 flex-col gap-6">
@@ -56,8 +65,10 @@ export default function Calendar26() {
                 selected={dateFrom}
                 captionLayout="dropdown"
                 onSelect={(date) => {
-                  setDateFrom(date)
-                  setOpenFrom(false)
+                  if (date) {
+                    setDateFrom(date);
+                    setOpenFrom(false);
+                  }
                 }}
               />
             </PopoverContent>
@@ -71,7 +82,8 @@ export default function Calendar26() {
             type="time"
             id="time-from"
             step="1"
-            defaultValue="10:30:00"
+            defaultValue={timeFrom}
+            onChange={(val) => setTimeFrom(val.target.value)}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
         </div>
@@ -105,10 +117,13 @@ export default function Calendar26() {
               <Calendar
                 mode="single"
                 selected={dateTo}
+                endMonth={dateTo}
                 captionLayout="dropdown"
                 onSelect={(date) => {
-                  setDateTo(date)
-                  setOpenTo(false)
+                  if (date) {
+                    setDateTo(date);
+                    setOpenTo(false);
+                  }
                 }}
                 disabled={dateFrom && { before: dateFrom }}
               />
@@ -123,11 +138,12 @@ export default function Calendar26() {
             type="time"
             id="time-to"
             step="1"
-            defaultValue="12:30:00"
+            defaultValue={timeTo}
+            onChange={(val) => setTimeTo(val.target.value)}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
