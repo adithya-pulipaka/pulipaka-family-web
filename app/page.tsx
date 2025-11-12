@@ -15,10 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Calendar26 from "@/components/calendar-26";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 interface EventInfo {
+  eventId: string | null;
   eventName: string | null;
   description: string | null;
   eventStartTime: string | null;
@@ -29,12 +31,14 @@ interface EventInfo {
 export default function Home() {
   const [open, setOpen] = useState(false);
   const [eventInfo, setEventInfo] = useState<EventInfo>({
+    eventId: null,
     eventName: null,
     description: null,
     eventStartTime: null,
     eventEndTime: null,
     location: null,
   });
+  const [events, setEvents] = useState<EventInfo[]>([]);
 
   const updateEventDuration = (startTime: string, eventEndTime: string) => {
     setEventInfo({
@@ -56,6 +60,15 @@ export default function Home() {
     console.log(response);
     setOpen(false);
   };
+
+  useEffect(() => {
+    const getEvents = async () => {
+      const eventsList = await axios.get("http://localhost:8000/events");
+      setEvents(eventsList.data);
+      console.log(eventsList.data);
+    };
+    getEvents();
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -127,6 +140,24 @@ export default function Home() {
               </DialogContent>
             </form>
           </Dialog>
+        </div>
+        <div>
+          {events &&
+            events.length > 0 &&
+            events.map((event) => {
+              return (
+                <div key={event.eventId}>
+                  <p>
+                    <Link href={`events/${event.eventId}`}>
+                      {event.eventName}
+                    </Link>
+                  </p>
+                  <p>{event.description}</p>
+                  <p>{event.location}</p>
+                  <br />
+                </div>
+              );
+            })}
         </div>
       </main>
     </div>
