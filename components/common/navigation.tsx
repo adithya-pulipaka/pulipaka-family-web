@@ -10,8 +10,9 @@ import CreateEventDialog from "../events/CreateEventDialog";
 const Navigation = () => {
   return (
     <>
-      <div className="w-full">
-        <NavigationMenu className="ml-auto pr-12 py-2">
+      <div className="w-full flex flex-col py-2">
+        <div className="text-2xl font-bold text-center">Pulipaka</div>
+        {/* <NavigationMenu className="ml-auto pr-12 w-max ">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuLink
@@ -22,7 +23,7 @@ const Navigation = () => {
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu> */}
       </div>
     </>
   );

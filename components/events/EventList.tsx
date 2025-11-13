@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -5,8 +6,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -47,7 +46,6 @@ const EventList = () => {
                   {event.location}
                 </CardDescription>
               </CardHeader>
-              <CardContent></CardContent>
               <CardFooter className="flex-col gap-2">
                 <Button className="w-full" asChild>
                   <Link href={`events/${event.eventId}`}>

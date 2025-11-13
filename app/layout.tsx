@@ -29,7 +29,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navigation />
-        <main>{children}</main>
+        <main className="px-16 py-8 min-h-screen font-sans dark:bg-black">
+          {children}
+        </main>
       </body>
     </html>
   );

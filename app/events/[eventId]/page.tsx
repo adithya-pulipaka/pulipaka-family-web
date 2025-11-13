@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Spinner } from "@/components/ui/spinner";
 
 // {
 //     "type": "file",
@@ -93,7 +94,10 @@ const EventDetails = ({ params }: { params: Promise<{ eventId: string }> }) => {
     <>
       <div className="flex">
         <div>
-          <Button onClick={createAlbum}>Create Album</Button>
+          <Button onClick={createAlbum}>
+            <Spinner />
+            Create Album
+          </Button>
         </div>
         <div className="grid w-full max-w-sm items-center gap-3">
           <Label htmlFor="picture">Picture</Label>
