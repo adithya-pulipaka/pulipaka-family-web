@@ -1,165 +1,26 @@
-"use client";
-
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Calendar26 from "@/components/calendar-26";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Link from "next/link";
-
-interface EventInfo {
-  eventId: string | null;
-  eventName: string | null;
-  description: string | null;
-  eventStartTime: string | null;
-  eventEndTime: string | null;
-  location: string | null;
-}
+import EventList from "@/components/events/EventList";
+import CreateEventDialog from "@/components/events/CreateEventDialog";
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-  const [eventInfo, setEventInfo] = useState<EventInfo>({
-    eventId: null,
-    eventName: null,
-    description: null,
-    eventStartTime: null,
-    eventEndTime: null,
-    location: null,
-  });
-  const [events, setEvents] = useState<EventInfo[]>([]);
-
-  const updateEventDuration = (startTime: string, eventEndTime: string) => {
-    setEventInfo({
-      ...eventInfo,
-      eventStartTime: startTime,
-      eventEndTime: eventEndTime,
-    });
-  };
-
-  const onSubmit = async () => {
-    console.log(eventInfo);
-    eventInfo.description = "desc-1";
-    eventInfo.eventName = "hello there";
-    eventInfo.location = "hyderabad";
-    const response = await axios.post(
-      "http://localhost:8000/events",
-      eventInfo
-    );
-    console.log(response);
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    const getEvents = async () => {
-      const eventsList = await axios.get("http://localhost:8000/events");
-      setEvents(eventsList.data);
-      console.log(eventsList.data);
-    };
-    getEvents();
-  }, []);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full flex-col items-center py-16 px-8 bg-white dark:bg-black sm:items-start">
-        <div className="">
-          <Button
-            onClick={() => setOpen(true)}
-            className="hover:cursor-pointer"
-          >
-            Create Event
-          </Button>
-        </div>
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <Dialog open={open} onOpenChange={setOpen}>
-            <form>
-              {/* <DialogTrigger asChild>
-                <Button>Create Event</Button>
-              </DialogTrigger> */}
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Event Details</DialogTitle>
-                  <DialogDescription>
-                    Create a new Event using this form below. You can always
-                    update the event info later.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4">
-                  <div className="grid gap-3">
-                    <Label htmlFor="eventName">Event Name</Label>
-                    <Input
-                      id="eventName"
-                      name="eventName"
-                      defaultValue="Pedro Duarte"
-                      placeholder="Enter the event name here"
-                    />
-                  </div>
-                  <div className="grid gap-3">
-                    <Label htmlFor="eventDescription">Event Description</Label>
-                    <Input
-                      id="eventDescription"
-                      name="eventDescription"
-                      defaultValue="@peduarte"
-                      placeholder="Brief info about the event"
-                    />
-                  </div>
-                  <div className="grid gap-3">
-                    <Calendar26
-                      onEventDurationChange={updateEventDuration}
-                    ></Calendar26>
-                  </div>
-                  <div className="grid gap-3">
-                    <Label htmlFor="eventLocation">Event Location</Label>
-                    <Input
-                      id="eventLocation"
-                      name="eventLocation"
-                      defaultValue="@peduarte"
-                      placeholder="Location of the event"
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button type="submit" onClick={onSubmit}>
-                    Save changes
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </form>
-          </Dialog>
+    <section className=" dark:bg-black flex flex-col gap-8">
+      <section className="flex flex-col gap-4">
+        <div className="flex gap-4 items-center">
+          <p className="text-md font-bold">Upcoming Events</p>
+          <div>
+            <CreateEventDialog />
+          </div>
         </div>
         <div>
-          {events &&
-            events.length > 0 &&
-            events.map((event) => {
-              return (
-                <div key={event.eventId}>
-                  <p>
-                    <Link href={`events/${event.eventId}`}>
-                      {event.eventName}
-                    </Link>
-                  </p>
-                  <p>{event.description}</p>
-                  <p>{event.location}</p>
-                  <br />
-                </div>
-              );
-            })}
+          <EventList />
         </div>
-      </main>
-    </div>
+      </section>
+      <section className="flex flex-col gap-4">
+        <p className="text-md font-bold">Past 3 Events</p>
+        <div>
+          <EventList />
+        </div>
+      </section>
+    </section>
   );
 }
